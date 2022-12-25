@@ -12,6 +12,7 @@ export default function InterajaBotao() {
       }}
     >
       <Chip
+        onPress={() => navigation.navigate("Chat")}
         title="Interaja Conosco"
         icon={{
           name: "comments-o",

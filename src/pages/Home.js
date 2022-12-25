@@ -4,6 +4,7 @@ import Player from "../shared/components/Player";
 import Parceiros from "../shared/components/Parceiros";
 import InterajaBotao from "../shared/components/InterajaBotao";
 import VejaReveja from "../shared/components/VejaReveja";
+import Divider from "../shared/components/Divider";
 
 const list = [
   {
@@ -29,7 +30,7 @@ export default class HomeScreen extends React.Component {
         <InterajaBotao />
 
         <VejaReveja />
-
+        <Divider />
         <Parceiros />
       </View>
     );

@@ -1,8 +1,8 @@
-import React from 'react';
-import {View, Text, ScrollView, Image, TouchableOpacity} from 'react-native';
-import Icon from 'react-native-vector-icons/Ionicons';
-import axios from 'axios';
-import io from 'socket.io-client';
+import React from "react";
+import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import Icon from "react-native-vector-icons/Ionicons";
+import axios from "axios";
+import io from "socket.io-client";
 
 class ChatsScreen extends React.Component {
   constructor(props) {
@@ -21,10 +21,10 @@ class ChatsScreen extends React.Component {
     this.getMessages();
 
     //start socket connections
-    this.socket = io('http://localhost:3000');
+    this.socket = io("http://localhost:3000");
     this.socket.connect();
-    this.socket.on('incommingMessage', () => {
-      console.log('called');
+    this.socket.on("incommingMessage", () => {
+      console.log("called");
       this.getMessages();
     });
   }
@@ -32,39 +32,31 @@ class ChatsScreen extends React.Component {
   getMessages = async () => {
     try {
       let response = await axios.get(
-        'http://localhost:3000' +
-          '/chats/' +
-          this.state.userId,
+        "http://localhost:3000" + "/chats/" + this.state.userId
       );
       if (response.status === 200) {
         let chats = [];
         for (var i = 0; i < response.data.length; i++) {
           if (response.data[i].sender == this.state.userId) {
             await axios
-              .get(
-                'http://localhost:3000/find/' +
-                  response.data[i].reciever,
-              )
-              .then(res => {
+              .get("http://localhost:3000/find/" + response.data[i].reciever)
+              .then((res) => {
                 const chatItem = {
                   message: response.data[i].messages[0].text
                     ? response.data[i].messages[0].text
-                    : 'Sent an image',
+                    : "Sent an image",
                   user: res.data,
                 };
                 chats.push(chatItem);
               });
           } else {
             await axios
-              .get(
-                'http://localhost:3000/find/' +
-                  response.data[i].sender,
-              )
-              .then(res => {
+              .get("http://localhost:3000/find/" + response.data[i].sender)
+              .then((res) => {
                 const chatItem = {
                   message: response.data[i].messages[0].text
                     ? response.data[i].messages[0].text
-                    : 'Sent an image',
+                    : "Sent an image",
                   user: res.data,
                 };
                 chats.push(chatItem);
@@ -85,74 +77,81 @@ class ChatsScreen extends React.Component {
       <View>
         <Text
           style={{
-            color: '#f4f4f4',
+            color: "#f4f4f4",
             fontSize: 36,
-            padding: '5%',
-            paddingLeft: '7%',
-            fontFamily: 'Cairo-Regular',
-          }}>
+            padding: "5%",
+            paddingLeft: "7%",
+            fontFamily: "Cairo-Regular",
+          }}
+        >
           Conversations
         </Text>
         <View>
           <ScrollView
             style={{
-              paddingHorizontal: '7%',
-              marginBottom: '18%',
-              paddingBottom: '1.5%',
-            }}>
+              paddingHorizontal: "7%",
+              marginBottom: "18%",
+              paddingBottom: "1.5%",
+            }}
+          >
             <TouchableOpacity
               onPress={() => {
-                this.props.screenProps.homeNavigation.push('Broadcast', {
+                this.props.screenProps.homeNavigation.push("Broadcast", {
                   senderId: this.props.screenProps.user,
                   senderName: this.props.screenProps.userName,
                   senderPhoto: this.props.screenProps.userPhoto,
                 });
                 // console.log(this.props);
-              }}>
+              }}
+            >
               <View
                 style={{
                   flex: 2,
-                  flexDirection: 'row',
-                  marginVertical: '2%',
-                  paddingVertical: '4%',
+                  flexDirection: "row",
+                  marginVertical: "2%",
+                  paddingVertical: "4%",
                   borderRadius: 10,
-                }}>
+                }}
+              >
                 <Image
                   source={{
-                    uri: 'https://i.imgur.com/4vzW11a.png',
+                    uri: "https://i.imgur.com/4vzW11a.png",
                   }}
-                  style={{width: 60, height: 60, borderRadius: 70}}
+                  style={{ width: 60, height: 60, borderRadius: 70 }}
                 />
                 <View
                   style={{
                     flex: 2,
-                    flexDirection: 'column',
-                    marginHorizontal: '5%',
-                    marginTop: '1%',
-                  }}>
+                    flexDirection: "column",
+                    marginHorizontal: "5%",
+                    marginTop: "1%",
+                  }}
+                >
                   <Text
                     style={{
                       fontSize: 18,
-                      fontFamily: 'Cairo-SemiBold',
-                      color: '#f2f2f2',
-                    }}>
+                      fontFamily: "Cairo-SemiBold",
+                      color: "#f2f2f2",
+                    }}
+                  >
                     Broadcast
                   </Text>
                   <Text
                     style={{
                       fontSize: 14,
-                      fontFamily: 'Cairo-Light',
-                      color: 'lightgrey',
-                    }}>
+                      fontFamily: "Cairo-Light",
+                      color: "lightgrey",
+                    }}
+                  >
                     Chat with the global community
                   </Text>
                 </View>
               </View>
             </TouchableOpacity>
-            {this.state.chats.map(chatItem => (
+            {this.state.chats.map((chatItem) => (
               <TouchableOpacity
                 onPress={() => {
-                  this.props.screenProps.homeNavigation.push('Message', {
+                  this.props.screenProps.homeNavigation.push("Message", {
                     userName: chatItem.user.name,
                     userId: chatItem.user.id,
                     userPhoto: chatItem.user.photo,
@@ -161,42 +160,47 @@ class ChatsScreen extends React.Component {
                     senderPhoto: this.state.userPhoto,
                   });
                   // console.log(this.props);
-                }}>
+                }}
+              >
                 <View
                   style={{
                     flex: 2,
-                    flexDirection: 'row',
-                    marginVertical: '2%',
-                    paddingVertical: '4%',
+                    flexDirection: "row",
+                    marginVertical: "2%",
+                    paddingVertical: "4%",
                     borderRadius: 10,
-                  }}>
+                  }}
+                >
                   <Image
                     source={{
                       uri: chatItem.user.photo,
                     }}
-                    style={{width: 60, height: 60, borderRadius: 70}}
+                    style={{ width: 60, height: 60, borderRadius: 70 }}
                   />
                   <View
                     style={{
                       flex: 2,
-                      flexDirection: 'column',
-                      marginHorizontal: '5%',
-                      marginTop: '1%',
-                    }}>
+                      flexDirection: "column",
+                      marginHorizontal: "5%",
+                      marginTop: "1%",
+                    }}
+                  >
                     <Text
                       style={{
                         fontSize: 18,
-                        fontFamily: 'Cairo-SemiBold',
-                        color: '#f2f2f2',
-                      }}>
+                        fontFamily: "Cairo-SemiBold",
+                        color: "#f2f2f2",
+                      }}
+                    >
                       {chatItem.user.name}
                     </Text>
                     <Text
                       style={{
                         fontSize: 14,
-                        fontFamily: 'Cairo-Light',
-                        color: 'lightgrey',
-                      }}>
+                        fontFamily: "Cairo-Light",
+                        color: "lightgrey",
+                      }}
+                    >
                       {chatItem.message}
                     </Text>
                   </View>
